@@ -14,8 +14,8 @@ This is a recreation of a Headway therapist directory page, used for teaching th
 
 - `index.html` — Main therapist directory/listing page with search and filter
 - `provider.html` — Individual therapist profile page (loaded via `?id=therapist-id` query param)
-- `therapists.js` — Fake database of therapist data used by both pages (loaded via `<script src>`)
-- `therapists.json` — Same data in JSON format (reference copy, not used at runtime)
+- `therapists.js` — Fake database of 132 therapist records used by both pages (loaded via `<script src>`)
+- `therapists.json` — Same data in JSON format (reference copy, not used at runtime). The dataset is intentionally rich with realistic data quality issues, coverage gaps, geographic distribution patterns, and other anomalies that students can explore by building dashboards and data visualizations.
 
 ## How It Works
 
