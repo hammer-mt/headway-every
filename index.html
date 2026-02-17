@@ -694,6 +694,154 @@
       font-weight: 600;
     }
 
+    /* ===== VIEW TOGGLE ===== */
+    .view-toggle-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .view-toggle {
+      display: flex;
+      background: var(--bg-light);
+      border-radius: 10px;
+      padding: 4px;
+      gap: 2px;
+    }
+    .view-toggle button {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 8px;
+      background: transparent;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .view-toggle button.active {
+      background: #fff;
+      color: var(--text-primary);
+      font-weight: 600;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .view-toggle button svg { width: 16px; height: 16px; }
+
+    /* ===== MAP VIEW ===== */
+    .map-container {
+      display: none;
+      position: relative;
+      width: 100%;
+      height: 600px;
+      background: #e8ecf0;
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 40px;
+    }
+    .map-container.active { display: block; }
+    .map-svg {
+      width: 100%;
+      height: 100%;
+    }
+    .map-pin {
+      cursor: pointer;
+      transition: r 0.15s;
+    }
+    .map-pin:hover { r: 8; }
+    .map-popup {
+      display: none;
+      position: absolute;
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      padding: 20px;
+      width: 300px;
+      z-index: 10;
+      pointer-events: auto;
+    }
+    .map-popup.visible { display: block; }
+    .map-popup-close {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      background: none;
+      border: none;
+      font-size: 18px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      line-height: 1;
+    }
+    .map-popup-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .map-popup-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 700;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .map-popup-name {
+      font-family: Georgia, serif;
+      font-size: 18px;
+    }
+    .map-popup-role {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .map-popup-detail {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+      line-height: 1.5;
+    }
+    .map-popup-link {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 8px 16px;
+      background: var(--text-primary);
+      color: #fff;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .map-legend {
+      position: absolute;
+      bottom: 16px;
+      left: 16px;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(6px);
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+    .map-legend-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+    .map-legend-row:last-child { margin-bottom: 0; }
+    .map-legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
     /* ===== RESPONSIVE ===== */
     @media (max-width: 768px) {
       .navbar { padding: 12px 16px; }
@@ -710,6 +858,7 @@
       .tab-content.active { grid-template-columns: 1fr 1fr; }
       .hero-form { flex-direction: column; align-items: stretch; }
       .insurance-input { min-width: unset; }
+      .map-container { height: 400px; }
     }
   </style>
 </head>
@@ -803,6 +952,30 @@
       <p class="therapists-intro">
         Family challenges affect everyone differently. Headway's network of 2,299 providers across New York delivers personalized talk therapy and medication management for family-related concerns, with sessions as affordable as $0 through insurance.
       </p>
+
+      <div class="view-toggle-bar">
+        <div></div>
+        <div class="view-toggle">
+          <button class="active" onclick="setView('list')" id="listViewBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+            List
+          </button>
+          <button onclick="setView('map')" id="mapViewBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+            Map
+          </button>
+        </div>
+      </div>
+
+      <!-- Map View -->
+      <div class="map-container" id="mapContainer">
+        <svg class="map-svg" id="mapSvg"></svg>
+        <div class="map-popup" id="mapPopup"></div>
+        <div class="map-legend">
+          <div class="map-legend-row"><div class="map-legend-dot" style="background:#166534;"></div> Therapist location</div>
+          <div class="map-legend-row"><div class="map-legend-dot" style="background:#93c5fd;opacity:0.4;"></div> Water</div>
+        </div>
+      </div>
 
       <div class="card-grid" id="cardGrid">
         <!-- Cards loaded dynamically from therapists.json -->
@@ -1068,7 +1241,7 @@
         return;
       }
 
-      grid.style.display = '';
+      grid.style.display = currentView === 'list' ? '' : 'none';
       noResults.style.display = 'none';
 
       grid.innerHTML = therapists.map(t => {
@@ -1144,6 +1317,7 @@
 
       renderCards(filteredTherapists);
       updateCount(filteredTherapists.length);
+      if (currentView === 'map') renderMap(filteredTherapists);
     }
 
     function updateCount(count) {
@@ -1174,6 +1348,199 @@
       event.target.classList.add('active');
       document.getElementById(tabId).classList.add('active');
     }
+
+    // ===== ZIP CODE → COORDINATES =====
+    const ZIP_COORDS = {
+      '10001':[40.7484,-73.9967],'10002':[40.7157,-73.9863],'10003':[40.7317,-73.9893],
+      '10004':[40.6993,-74.0384],'10005':[40.7069,-74.0089],'10006':[40.7094,-74.0131],
+      '10007':[40.7135,-74.0079],'10008':[40.7112,-74.0006],'10009':[40.7265,-73.9797],
+      '10010':[40.7390,-73.9826],'10011':[40.7418,-74.0002],'10013':[40.7198,-74.0030],
+      '10014':[40.7337,-74.0061],'10018':[40.7549,-73.9928],'10019':[40.7654,-73.9851],
+      '10020':[40.7587,-73.9787],'10021':[40.7693,-73.9586],'10022':[40.7587,-73.9680],
+      '10023':[40.7764,-73.9825],'10024':[40.7885,-73.9760],'10025':[40.7982,-73.9667],
+      '10026':[40.8025,-73.9530],'10027':[40.8116,-73.9530],'10028':[40.7765,-73.9539],
+      '10030':[40.8182,-73.9433],'10031':[40.8244,-73.9500],'10032':[40.8389,-73.9422],
+      '10033':[40.8497,-73.9346],'10034':[40.8672,-73.9227],'10035':[40.7957,-73.9395],
+      '10036':[40.7590,-73.9903],'10039':[40.8240,-73.9370],'10040':[40.8580,-73.9296],
+      '10453':[40.8530,-73.9127],'10458':[40.8621,-73.8880],'10459':[40.8244,-73.8927],
+      '10462':[40.8424,-73.8577],'10469':[40.8695,-73.8514],'10470':[40.8950,-73.8670],
+      '10471':[40.8997,-73.9003],'11103':[40.7632,-73.9130],'11104':[40.7444,-73.9204],
+      '11106':[40.7623,-73.9288],'11201':[40.6934,-73.9898],'11206':[40.7024,-73.9420],
+      '11207':[40.6707,-73.8862],'11208':[40.6663,-73.8717],'11210':[40.6282,-73.9466],
+      '11212':[40.6632,-73.9130],'11215':[40.6620,-73.9858],'11216':[40.6811,-73.9495],
+      '11218':[40.6435,-73.9752],'11219':[40.6333,-73.9969],'11220':[40.6414,-74.0163],
+      '11221':[40.6909,-73.9273],'11222':[40.7272,-73.9480],'11226':[40.6463,-73.9565],
+      '11229':[40.6013,-73.9437],'11232':[40.6567,-74.0055],'11239':[40.6485,-73.8788],
+      '11354':[40.7681,-73.8276],'11362':[40.7614,-73.7367],'11369':[40.7636,-73.8711],
+      '11370':[40.7653,-73.8924],'11373':[40.7388,-73.8785],'11375':[40.7207,-73.8467],
+      '11377':[40.7447,-73.9048],'11378':[40.7258,-73.9085],'11379':[40.7168,-73.8789],
+      '11385':[40.7004,-73.8896],
+      '07010':[40.8224,-74.0590],'07014':[40.8550,-74.1460],'07018':[40.7470,-74.2106],
+      '07021':[40.8260,-74.1280],'07027':[40.6574,-74.2350],
+      '90210':[34.0901,-118.4065],'96801':[21.3069,-157.8583]
+    };
+
+    // Map bounds (NYC metro area)
+    const MAP_BOUNDS = { latMin: 40.56, latMax: 40.92, lngMin: -74.28, lngMax: -73.70 };
+
+    // ===== VIEW TOGGLE =====
+    let currentView = 'list';
+
+    function setView(view) {
+      currentView = view;
+      document.getElementById('listViewBtn').classList.toggle('active', view === 'list');
+      document.getElementById('mapViewBtn').classList.toggle('active', view === 'map');
+      document.getElementById('cardGrid').style.display = view === 'list' ? '' : 'none';
+      document.getElementById('mapContainer').classList.toggle('active', view === 'map');
+      if (view === 'map') renderMap(filteredTherapists);
+    }
+
+    // ===== MAP RENDERING =====
+    function renderMap(therapists) {
+      const svg = document.getElementById('mapSvg');
+      const container = document.getElementById('mapContainer');
+      const w = container.clientWidth;
+      const h = container.clientHeight;
+      const pad = 40;
+
+      function toXY(lat, lng) {
+        const x = pad + ((lng - MAP_BOUNDS.lngMin) / (MAP_BOUNDS.lngMax - MAP_BOUNDS.lngMin)) * (w - pad * 2);
+        const y = pad + ((MAP_BOUNDS.latMax - lat) / (MAP_BOUNDS.latMax - MAP_BOUNDS.latMin)) * (h - pad * 2);
+        return [x, y];
+      }
+
+      // Water features (simplified polygons for Hudson, East River, Upper Bay)
+      const water = [
+        // Hudson River (west side of Manhattan)
+        [[40.70,-74.025],[40.72,-74.015],[40.75,-74.005],[40.78,-73.998],[40.82,-73.960],[40.87,-73.940],[40.90,-73.935],[40.92,-73.930],[40.92,-74.030],[40.87,-74.020],[40.82,-74.020],[40.78,-74.020],[40.75,-74.018],[40.72,-74.025],[40.70,-74.035]],
+        // East River
+        [[40.70,-73.975],[40.72,-73.970],[40.74,-73.965],[40.76,-73.955],[40.78,-73.940],[40.80,-73.930],[40.82,-73.910],[40.82,-73.920],[40.80,-73.938],[40.78,-73.948],[40.76,-73.962],[40.74,-73.972],[40.72,-73.978],[40.70,-73.983]],
+        // Upper Bay
+        [[40.70,-74.035],[40.70,-73.975],[40.68,-73.970],[40.66,-73.980],[40.64,-74.000],[40.62,-74.020],[40.60,-74.040],[40.62,-74.060],[40.65,-74.055],[40.68,-74.040]],
+        // Jamaica Bay (rough)
+        [[40.62,-73.880],[40.64,-73.850],[40.63,-73.830],[40.60,-73.840],[40.58,-73.860],[40.59,-73.890],[40.61,-73.900]]
+      ];
+
+      let waterPaths = '';
+      water.forEach(poly => {
+        const points = poly.map(([lat, lng]) => {
+          const [x, y] = toXY(lat, lng);
+          return `${x},${y}`;
+        }).join(' ');
+        waterPaths += `<polygon points="${points}" fill="#93c5fd" opacity="0.3"/>`;
+      });
+
+      // Group therapists by zip code to avoid overlapping pins
+      const byZip = {};
+      therapists.forEach(t => {
+        const coords = ZIP_COORDS[t.zipCode];
+        if (!coords) return;
+        const [lat, lng] = coords;
+        if (lat < MAP_BOUNDS.latMin || lat > MAP_BOUNDS.latMax || lng < MAP_BOUNDS.lngMin || lng > MAP_BOUNDS.lngMax) return;
+        if (!byZip[t.zipCode]) byZip[t.zipCode] = [];
+        byZip[t.zipCode].push(t);
+      });
+
+      // Count therapists outside bounds
+      let outsideCount = 0;
+      therapists.forEach(t => {
+        const coords = ZIP_COORDS[t.zipCode];
+        if (!coords) return;
+        const [lat, lng] = coords;
+        if (lat < MAP_BOUNDS.latMin || lat > MAP_BOUNDS.latMax || lng < MAP_BOUNDS.lngMin || lng > MAP_BOUNDS.lngMax) outsideCount++;
+      });
+
+      let pins = '';
+      Object.entries(byZip).forEach(([zip, group]) => {
+        const [lat, lng] = ZIP_COORDS[zip];
+        const [x, y] = toXY(lat, lng);
+        const count = group.length;
+        const r = Math.min(6 + count * 1.5, 14);
+
+        // Jitter slightly for same-zip therapists but render as single pin with count
+        pins += `<circle class="map-pin" cx="${x}" cy="${y}" r="${r}" fill="#166534" opacity="0.85" stroke="#fff" stroke-width="2" data-zip="${zip}"/>`;
+        if (count > 1) {
+          pins += `<text x="${x}" y="${y + 1}" text-anchor="middle" dominant-baseline="middle" fill="#fff" font-size="10" font-weight="700" pointer-events="none">${count}</text>`;
+        }
+      });
+
+      // Outside-bounds note
+      let outsideNote = '';
+      if (outsideCount > 0) {
+        outsideNote = `<text x="${w - pad}" y="${pad - 10}" text-anchor="end" fill="#6b7280" font-size="12">${outsideCount} therapist${outsideCount > 1 ? 's' : ''} outside NYC area (not shown)</text>`;
+      }
+
+      svg.innerHTML = `
+        <rect width="${w}" height="${h}" fill="#eef1f5" rx="16"/>
+        ${waterPaths}
+        ${pins}
+        ${outsideNote}
+      `;
+
+      // Add click handlers
+      svg.querySelectorAll('.map-pin').forEach(pin => {
+        pin.addEventListener('click', (e) => {
+          const zip = pin.getAttribute('data-zip');
+          const group = byZip[zip];
+          showMapPopup(group, e.clientX, e.clientY, container);
+        });
+      });
+
+      // Close popup on background click
+      svg.addEventListener('click', (e) => {
+        if (!e.target.classList.contains('map-pin')) {
+          document.getElementById('mapPopup').classList.remove('visible');
+        }
+      });
+    }
+
+    function showMapPopup(therapists, mouseX, mouseY, container) {
+      const popup = document.getElementById('mapPopup');
+      const rect = container.getBoundingClientRect();
+      let left = mouseX - rect.left + 12;
+      let top = mouseY - rect.top - 20;
+
+      // Keep popup in bounds
+      if (left + 300 > rect.width) left = left - 320;
+      if (top + 250 > rect.height) top = rect.height - 260;
+      if (top < 10) top = 10;
+
+      const t = therapists[0];
+      const moreCount = therapists.length - 1;
+
+      let moreHtml = '';
+      if (moreCount > 0) {
+        const others = therapists.slice(1, 4).map(o =>
+          `<a href="provider.html?id=${o.id}" style="display:block;padding:4px 0;font-size:13px;color:var(--green-dark);">${o.name} &mdash; ${o.role}</a>`
+        ).join('');
+        const remaining = moreCount > 3 ? `<span style="font-size:12px;color:var(--text-secondary);">+${moreCount - 3} more nearby</span>` : '';
+        moreHtml = `<div style="border-top:1px solid var(--border-color);margin-top:10px;padding-top:10px;">${others}${remaining}</div>`;
+      }
+
+      popup.innerHTML = `
+        <button class="map-popup-close" onclick="document.getElementById('mapPopup').classList.remove('visible')">&times;</button>
+        <div class="map-popup-header">
+          <div class="map-popup-avatar" style="background:${t.avatarGradient};">${t.initials}</div>
+          <div>
+            <div class="map-popup-name font-serif">${t.name}</div>
+            <div class="map-popup-role">${t.role} &bull; ${t.location}</div>
+          </div>
+        </div>
+        <div class="map-popup-detail">${t.specialties.slice(0, 3).join(', ')}</div>
+        <div class="map-popup-detail">Next opening: ${t.nextOpening}</div>
+        <a href="provider.html?id=${t.id}" class="map-popup-link">View profile</a>
+        ${moreHtml}
+      `;
+
+      popup.style.left = left + 'px';
+      popup.style.top = top + 'px';
+      popup.classList.add('visible');
+    }
+
+    // ===== RESIZE HANDLER =====
+    window.addEventListener('resize', () => {
+      if (currentView === 'map') renderMap(filteredTherapists);
+    });
 
     // ===== INIT =====
     renderCards(allTherapists);
